@@ -1,0 +1,30 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Code Highliter{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="container" style="padding: 30px;">
+            <h3>Подстветка синтаксиса. Введите код в форму ниже:</h3>
+            
+            <form action="{{ url_for('highlite') }}" method="POST">
+                <select class="form-control" name="lexer" id="lexers" style="width: 200px; margin-bottom: 10px;">
+                    <option value="PHP">PHP</option>
+                    <option value="Python3">Python3</option>
+                </select>
+                <textarea name="code" class="form-control" id="codearea" cols="30" rows="5"></textarea>
+                <input class="btn btn-sm btn-info" type="submit" value="Подсветить" style="margin-top: 20px;" />
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="pygments" class="container" style="padding: 30px;">
+            {% if formatted %}
+                {{ formatted|safe }}
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

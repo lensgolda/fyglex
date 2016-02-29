@@ -12,9 +12,12 @@ import json
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route('/', methods=['GET', 'POST'])
-def index(formatted=None):
+@app.route('/codehighlighter', methods=['GET', 'POST'])
+def highlite(formatted=None):
     if request.method == 'POST':
         code = request.form['code']
         lexer = Python3Lexer(stripall=True)
@@ -23,20 +26,33 @@ def index(formatted=None):
         formatter = HtmlFormatter(
             linenos=True, style='xcode', cssclass="highlight", full=True)
         formatted = highlight(code, lexer, formatter)
-        return render_template('pygments.html', formatted=formatted)
+        return render_template('highlighter.html', formatted=formatted)
 
-    return render_template('index.html')
+    return render_template('highlighter.html')
 
 
-@app.route('/search')
-def search():
-    baseurl = 'https://maps.googleapis.com/maps/api/geocode/json?language=ru&'
-    url = baseurl + \
-        urllib.parse.urlencode({'address': request.args.get('address')})
-    urlhandler = urllib.request.urlopen(url)
-    response = urlhandler.read()
-    geojson = json.loads(response.decode('utf-8'))
-    return render_template('geo.html', geodata=geojson)
+@app.route('/geosearch', methods=['GET', 'POST'])
+def geosearch():
+    if request.method == 'POST':
+        baseurl = 'https://maps.googleapis.com/maps/api/geocode/json?language=ru&'
+        url = baseurl + \
+            urllib.parse.urlencode({'address': request.form['address']})
+        urlhandler = urllib.request.urlopen(url)
+        response = urlhandler.read()
+        geojson = json.loads(response.decode('utf-8'))
+        return render_template('geo.html', geodata=geojson)
+    return render_template('geo.html', geodata='[]')
+
+
+@app.route('/about')
+def about():
+    return '<h1>About Page</h1>'
+
+
+@app.route('/contact')
+def contact():
+    return '<h1>Contact Page</h1>'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

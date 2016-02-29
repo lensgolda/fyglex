@@ -1,0 +1,49 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Geo Search{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="container" style="padding: 30px;">
+            <h3>Поиск координат локации в Google:</h3>
+            
+            <form action="{{ url_for('geosearch') }}" method="POST">
+                <input type="text" name="address" class="form-control"/>
+                <input class="btn btn-sm btn-info" type="submit" value="Отправить" style="margin-top: 20px;" />
+            </form>
+        </div>
+    </div>
+
+    <div id="geo" class="row">
+        <div v-if="$data.results" class="container" style="padding: 30px;">
+            <div class="well" v-for="result in results">
+                <p>${ result.formatted_address }</p>
+                <p>Широта: ${ result.geometry.location.lat }</p>
+                <p>Долгота: ${ result.geometry.location.lng }</p>
+                <p>place_id: ${ result.place_id }</p>
+            </div>
+        </div>
+        <!-- <div>
+            <pre>
+                ${ $data | json }
+            </pre>
+        </div> -->
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Vue.config.delimiters = ['${', '}']
+            var vm = new Vue({
+                el: '#geo',
+                data: {{ geodata | safe }}
+            });
+        });
+    </script>
+{% endblock %}
