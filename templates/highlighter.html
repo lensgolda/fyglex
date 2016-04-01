@@ -9,8 +9,9 @@
             
             <form action="{{ url_for('highlite') }}" method="POST">
                 <select class="form-control" name="lexer" id="lexers" style="width: 200px; margin-bottom: 10px;">
-                    <option value="PHP">PHP</option>
-                    <option value="Python3">Python3</option>
+                    {% for lexer in lexers %}
+                        <option value="{{ lexer[0] }}">{{ lexer[0] }}</option>
+                    {% endfor %}
                 </select>
                 <textarea name="code" class="form-control" id="codearea" cols="30" rows="5"></textarea>
                 <input class="btn btn-sm btn-info" type="submit" value="Подсветить" style="margin-top: 20px;" />

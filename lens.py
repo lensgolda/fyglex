@@ -3,7 +3,7 @@ from flask import request
 from flask import render_template
 
 from pygments import highlight
-from pygments.lexers import Python3Lexer, PhpLexer
+from pygments.lexers import Python3Lexer, PhpLexer, get_lexer_by_name, get_all_lexers
 from pygments.formatters import HtmlFormatter
 
 import urllib.parse
@@ -18,17 +18,16 @@ def index():
 
 @app.route('/codehighlighter', methods=['GET', 'POST'])
 def highlite(formatted=None):
+    lexers_all = sorted(get_all_lexers(), key=lambda lexer: lexer[0])
     if request.method == 'POST':
-        code = request.form['code']
-        lexer = Python3Lexer(stripall=True)
-        if request.form['lexer'] == 'PHP':
-            lexer = PhpLexer()
+        code, lexer = request.form['code'], request.form['lexer']
+        lexer = get_lexer_by_name(lexer.strip())
         formatter = HtmlFormatter(
             linenos=True, style='xcode', cssclass="highlight", full=True)
         formatted = highlight(code, lexer, formatter)
         return render_template('highlighter.html', formatted=formatted)
 
-    return render_template('highlighter.html')
+    return render_template('highlighter.html', lexers=lexers_all)
 
 
 @app.route('/geosearch', methods=['GET', 'POST'])
