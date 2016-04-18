@@ -37,3 +37,6 @@ body > .container {
 code {
   font-size: 80%;
 }
+#codearea {
+  margin-top: 20px;
+}

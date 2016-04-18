@@ -23,7 +23,7 @@ def highlite(formatted=None):
         formatter = HtmlFormatter(
             linenos=True, style='xcode', cssclass="highlight", full=True)
         formatted = highlight(code, lexer, formatter)
-        return render_template('highlighter.html', formatted=formatted)
+        return render_template('highlighter.html', formatted=formatted, lexers=lexers_all)
 
     return render_template('highlighter.html', lexers=lexers_all)
 
@@ -41,11 +41,11 @@ def geosearch():
     return render_template('geo.html', geodata='[]')
 
 
-@app.route('/about')
+@app.route('/about', methods=['GET'])
 def about():
-    return '<h1>About Page</h1>'
+    return render_template('about.html')
 
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET'])
 def contact():
-    return '<h1>Contact Page</h1>'
+    return render_template('contact.html')

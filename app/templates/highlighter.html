@@ -1,5 +1,10 @@
 {% extends "layouts/layout.html" %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}">
+{% endblock %}
+
 {% block title %}Code Highliter{% endblock %}
 
 {% block content %}
@@ -8,7 +13,7 @@
             <h3>Подстветка синтаксиса. Введите код в форму ниже:</h3>
             
             <form action="{{ url_for('highlite') }}" method="POST">
-                <select class="form-control" name="lexer" id="lexers" style="width: 200px; margin-bottom: 10px;">
+                <select class="selectpicker" name="lexer" id="lexers" data-live-search="true">
                     {% for lexer in lexers %}
                         <option value="{{ lexer[0] }}">{{ lexer[0] }}</option>
                     {% endfor %}
@@ -28,4 +33,7 @@
     </div>
 
 
+{% endblock %}
+{% block temp_scripts %}
+    <script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}"></script>
 {% endblock %}
