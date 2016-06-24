@@ -1,6 +1,6 @@
 from app import app
-from flask import request
-from flask import render_template
+from flask import request, render_template
+from app import dbhandler
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, get_all_lexers
@@ -49,3 +49,9 @@ def about():
 @app.route('/contact', methods=['GET'])
 def contact():
     return render_template('contact.html')
+
+# Sample of DB usage
+# db = dbhandler.get_db()
+#     cur = db.execute('select * from user order by id desc')
+#     users = cur.fetchall()
+#     return render_template('contact.html', users=users)
